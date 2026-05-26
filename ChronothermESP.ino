@@ -34,6 +34,7 @@
 // Create file Secrets.h with the following contents. Replace with your
 // information where indicated.
 // ************************************************************************
+/*
 // Wifi connection
 const char* ssid = "REPLACE_WITH_YOUR_SSID";
 const char* password = "REPLACE_WITH_YOUR_PASSWORD";
@@ -45,6 +46,7 @@ const char* smtpServer = "REPLACE_WITH_SERVER_URL";          // The server to us
 const char* imapServer = "REPLACE_WITH_SERVER_URL";          // The server to use for reading email (e.g. imap.gmail.com)
 const char* emailAccount = "REPLACE_WITH_EMAIL_ADDRESS";     // The email account on the server (e.g. myaddress@gmail.com)
 const char* emailPassword = "REPLACE_WITH_PASSWORD";         // The password for the email account (for Gmail an App Password)
+*/
 // ************************************************************************
 // End of Secrets.h
 // ************************************************************************
