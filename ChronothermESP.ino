@@ -107,8 +107,10 @@ WiFiClientSecure imap_client;
 IMAPClient imap(imap_client);
 const time_t LoopPeriod = 180;              // Number of seconds between checks
 std::vector<uint32_t> msgsToDelete;         // Global or static list of messages to delete
-time_t imapUpdateStarted;                   // The time when we started updating the clock
+time_t imapUpdateStarted = 0;               // The time when we last checked for email
+time_t imapReconnectAt = 0;                 // The earliest time to retry connecting to IMAP
 const time_t ReadMailFrequency = 300;       // Interval for reading email
+const time_t ImapReconnectFrequency = 60;   // Interval for retrying a dropped IMAP connection
 
 // For sending mail
 WiFiClientSecure smtp_client;
@@ -321,9 +323,8 @@ void imapDataCallback(IMAPCallbackData &data) {
           parseHeatCommand(subject);
 
           // Queue parsed messages for deletion from the mailbox.
-          // Using imap.currentMessage() because it works in both search and fetch callbacks.
-          ReadyMail.printf("%s%s%s\n", "Added message ", String(imap.currentMessage()), " for deletion");
-          msgsToDelete.push_back(imap.currentMessage());
+          ReadyMail.printf("%s%s%s\n", "Added message ", String(data.messageNum()), " for deletion");
+          msgsToDelete.push_back(data.messageNum());
           break;
         }
       }
@@ -1133,10 +1134,8 @@ void loop() {
           ntpTimeInitialized = true;
           ntpTimeSet = true;
 
-          // Catch emails that arrived while the device was offline
-          imap.search("SEARCH UNSEEN", 20, false, imapDataCallback, AWAIT_MODE);
-          deleteHandledMessages();
-          imapUpdateStarted = now();
+          // Catch emails that arrived while the device was offline on the next IMAP poll.
+          imapUpdateStarted = 0;
 
           setSunriseSunset();
         }
@@ -1186,11 +1185,11 @@ void loop() {
   handleWebCommand();
   handleHeatCommands();
 
-  // Catch lost connections
-  if (!WiFi.isConnected() || !imap.isConnected()) {      
+  // Catch lost Wi-Fi connections
+  if (!WiFi.isConnected()) {
     imap.logout();
     WiFi.disconnect();
-    Serial.println("No wifi or email connection, rebooting");
+    Serial.println("No wifi connection, rebooting");
     delay(retryPeriod * 1000);
     if (retryPeriod < 600) {
       retryPeriod = retryPeriod * 2;
@@ -1204,31 +1203,37 @@ void loop() {
       preferences.putUChar("retryPeriod", retryPeriod);
     }
   }
-  
-  // Let the imap client listen for messages
-  if (ntpTimeInitialized) {
-    if (now() > imapUpdateStarted + ReadMailFrequency) {
-      imapUpdateStarted = now();
-      if (WiFi.isConnected() && imap.isConnected()) {
-        ReadyMail.printf("ReadyMail [%d] %s\n", imap.status().state, imap.idleStatus().c_str());
 
-        // The imap.currentMessage() returns the message number that added/removed or flags updated from idling
-        imap.search("SEARCH ALL", 20, false, imapDataCallback, AWAIT_MODE);
-        deleteHandledMessages();
+  // Let the imap client listen for messages
+  imap.loop();
+
+  if (ntpTimeInitialized && !imap.isProcessing()) {
+    if (!imap.isConnected() && now() >= imapReconnectAt) {
+      printLine("Connecting to IMAP server");
+      imap.connect(imapServer, 993, imapStatusCallback);
+      if (!imap.isConnected()) {
+        printLine("IMAP connection failed");
+        imapReconnectAt = now() + ImapReconnectFrequency;
       }
     }
-  }
-  // This is required to be placed in the loop for idling.
-  // if (ntpTimeInitialized) {
-  //   if (WiFi.isConnected() && imap.isConnected()) {
-  //     imap.loop(IDLE_MODE);
-  //     if (imap.available()) {
-  //       ReadyMail.printf("ReadyMail[loop][%d] %s\n", imap.status().state, imap.idleStatus().c_str());
 
-  //       // The imap.currentMessage() returns the message number that added/removed or flags updated from idling
-  //       imap.fetch(imap.currentMessage(), imapDataCallback, NULL /* FileCallback */, AWAIT_MODE, MAX_CONTENT_SIZE);
-  //       deleteHandledMessages();
-  //     }
-  //   }
-  // }
+    if (imap.isConnected() && !imap.isAuthenticated()) {
+      imap.authenticate(emailAccount, emailPassword, readymail_auth_password, AWAIT_MODE);
+      if (!imap.isAuthenticated()) {
+        printLine("IMAP authentication failed");
+        imap.logout();
+        imapReconnectAt = now() + ImapReconnectFrequency;
+      }
+    }
+
+    if (imap.isAuthenticated() && imap.getMailbox().name != "INBOX")
+      imap.select("INBOX", false);
+
+    if ((now() > imapUpdateStarted + ReadMailFrequency || imapUpdateStarted == 0) && imap.isAuthenticated() && imap.getMailbox().name == "INBOX")
+    {
+      imapUpdateStarted = now();
+      imap.search("SEARCH UNSEEN", 20, true, imapDataCallback, AWAIT_MODE);
+      deleteHandledMessages();
+    }
+  }
 }
