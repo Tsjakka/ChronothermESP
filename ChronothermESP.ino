@@ -40,12 +40,16 @@ const char* ssid = "REPLACE_WITH_YOUR_SSID";
 const char* password = "REPLACE_WITH_YOUR_PASSWORD";
 
 // Email
-const char* fromAddress = "REPLACE_WITH_EMAIL_ADDRESS";      // The email address you want messages to be sent from
-const char* toAddress = "REPLACE_WITH_EMAIL_ADDRESS";        // The email address you want messages sent to
-const char* smtpServer = "REPLACE_WITH_SERVER_URL";          // The server to use for sending email (e.g. smtp.gmail.com)
-const char* imapServer = "REPLACE_WITH_SERVER_URL";          // The server to use for reading email (e.g. imap.gmail.com)
-const char* emailAccount = "REPLACE_WITH_EMAIL_ADDRESS";     // The email account on the server (e.g. myaddress@gmail.com)
-const char* emailPassword = "REPLACE_WITH_PASSWORD";         // The password for the email account (for Gmail an App Password)
+const char* fromAddress = "REPLACE_WITH_EMAIL_ADDRESS";       // The email address you want messages to be sent from
+const char* toAddress = "REPLACE_WITH_EMAIL_ADDRESS";         // The email address you want messages sent to
+const char* smtpServer = "REPLACE_WITH_SERVER_URL";           // The server to use for sending email (e.g. smtp.gmail.com)
+const char* imapServer = "REPLACE_WITH_SERVER_URL";           // The server to use for reading email (e.g. imap.gmail.com)
+const char* emailAccount = "REPLACE_WITH_EMAIL_ADDRESS";      // The email account on the server (e.g. myaddress@gmail.com)
+const char* emailPassword = "REPLACE_WITH_PASSWORD";          // The password for the email account (for Gmail an App Password)
+
+// Location
+const float Latitude = 0.0000000;                             // Replace with your coordinates
+const float Longitude = 0.000000;
 */
 // ************************************************************************
 // End of Secrets.h
@@ -55,8 +59,8 @@ const char* emailPassword = "REPLACE_WITH_PASSWORD";         // The password for
 // Change the constants below to adjust the software to your situation
 // ************************************************************************
 // Regional settings
-const float Latitude = 51.486167;                            // Replace with your coordinates
-const float Longitude = 5.483000;
+uint8_t Timezone = 60;                      // UTC difference in minutes (can be changed through web page)
+bool UseDST = true;                         // Is Daylight Saving Time observed in your region (can be changed through web page)
 
 // Button commands (GPIO pins)
 const int START_PROGRAM = 0;
@@ -71,7 +75,7 @@ const int COOLER = 4;
 const int HOLD_TIME = 300;   // ms to hold a keypress
 const int IDLE_TIME = 600;   // ms between keypresses
 
-// Temperature limits
+// Temperature limits of Chronotherm III
 const int MIN_TEMP = 7;
 const int MAX_TEMP = 20;
 
@@ -111,6 +115,11 @@ time_t imapUpdateStarted = 0;               // The time when we last checked for
 time_t imapReconnectAt = 0;                 // The earliest time to retry connecting to IMAP
 const time_t ReadMailFrequency = 300;       // Interval for reading email
 const time_t ImapReconnectFrequency = 60;   // Interval for retrying a dropped IMAP connection
+struct PendingMailCommand {
+  uint32_t msgNum;
+  String subject;
+};
+std::vector<PendingMailCommand> pendingMailCommands;  // List of commands read from the retrieved emails
 
 // For sending mail
 WiFiClientSecure smtp_client;
@@ -135,9 +144,6 @@ int DST = 0;
 sunMoon sm;
 time_t sunRise = 0;
 time_t sunSet = 0;
-
-uint8_t Timezone = 60;                      // UTC difference in minutes (can be changed through web page)
-bool UseDST = true;                         // Indicates whether Daylight Saving Time is observed in your region or not.
 
 #define MAX_DEBUG_TEXT 16000
 String debugText = "";                      // A string to hold all debug text
@@ -171,6 +177,7 @@ uint8_t MonthStartCommand = 0;
 
 // Declare functions with default arguments
 void printDateTime(time_t date, bool serialOnly = false);
+bool parseHeatCommand(const String& command);
 
 // The setup function that initializes everything
 void setup() {
@@ -194,10 +201,6 @@ void setup() {
   if (dataPresent) {
     Timezone = preferences.getUChar("Timezone", Timezone);
     UseDST = preferences.getBool("UseDST", UseDST);
-    // MonthStartCommand = preferences.getUChar("MonthStartCommand", MonthStartCommand);
-    // DayStartCommand = preferences.getUChar("DayStartCommand", DayStartCommand);
-    // HourStartCommand = preferences.getUChar("HourStartCommand", HourStartCommand);
-    // MinuteStartCommand = preferences.getUChar("MinuteStartCommand", MinuteStartCommand);
   } else {
     printLine("Using default configuration");
   }
@@ -260,13 +263,6 @@ void setup() {
 
   // Set up IMAP client
   imap_client.setInsecure();
-  imap.connect(imapServer, 993, imapStatusCallback);
-  if (imap.isConnected()) {
-    imap.authenticate(emailAccount, emailPassword, readymail_auth_password);
-    if (imap.isAuthenticated()) {
-      imap.select("INBOX", false);
-    }
-  }
 
   // Load from Preferences
   loadHeatCommands();
@@ -320,11 +316,11 @@ void imapDataCallback(IMAPCallbackData &data) {
         String subject = data.getHeader(i).second;
         subject.toUpperCase();
         if (subject.indexOf("HEAT") > -1) {
-          parseHeatCommand(subject);
-
-          // Queue parsed messages for deletion from the mailbox.
-          ReadyMail.printf("%s%s%s\n", "Added message ", String(data.messageNum()), " for deletion");
-          msgsToDelete.push_back(data.messageNum());
+          PendingMailCommand pendingCommand;
+          pendingCommand.msgNum = data.messageNum();
+          pendingCommand.subject = subject;
+          pendingMailCommands.push_back(pendingCommand);
+          ReadyMail.printf("%s%s%s\n", "Added message ", String(data.messageNum()), " for command handling");
           break;
         }
       }
@@ -667,6 +663,17 @@ void deleteHandledMessages() {
   }
 }
 
+void processPendingMailCommands() {
+  if (!pendingMailCommands.empty()) {
+    for (PendingMailCommand pendingCommand : pendingMailCommands) {
+      parseHeatCommand(pendingCommand.subject);
+      ReadyMail.printf("%s%s%s\n", "Added message ", String(pendingCommand.msgNum), " for deletion");
+      msgsToDelete.push_back(pendingCommand.msgNum);
+    }
+    pendingMailCommands.clear();
+  }
+}
+
 // Parse a command string and add valid commands to the buffer
 bool parseHeatCommand(const String& command) {
   HeatCommand newCommand = {1, -1, "", ""};
@@ -949,10 +956,6 @@ void handleWebClient() {
                 preferences.putBool("dataPresent", dataPresent);
                 preferences.putUChar("Timezone", Timezone);
                 preferences.putBool("UseDST", UseDST);
-                // preferences.putUChar("MonthStartCommand", MonthStartCommand);
-                // preferences.putUChar("DayStartCommand", DayStartCommand);
-                // preferences.putUChar("HourStartCommand", HourStartCommand);
-                // preferences.putUChar("MinuteStartCommand", MinuteStartCommand);
 
                 // Add new command to the queue
                 if (MonthStartCommand != 0 && DayStartCommand != 0) {
@@ -1204,36 +1207,34 @@ void loop() {
     }
   }
 
-  // Let the imap client listen for messages
-  imap.loop();
+  if (ntpTimeInitialized && (now() > imapUpdateStarted + ReadMailFrequency || imapUpdateStarted == 0)) {
+    imapUpdateStarted = now();
+    pendingMailCommands.clear();
 
-  if (ntpTimeInitialized && !imap.isProcessing()) {
-    if (!imap.isConnected() && now() >= imapReconnectAt) {
-      printLine("Connecting to IMAP server");
-      imap.connect(imapServer, 993, imapStatusCallback);
-      if (!imap.isConnected()) {
-        printLine("IMAP connection failed");
-        imapReconnectAt = now() + ImapReconnectFrequency;
-      }
-    }
+    // Gmail can close an idle TLS session between polls while ReadyMail still
+    // reports it as connected. Use a fresh IMAP session for each mail check.
+    imap.stop();
+    delay(250);
 
-    if (imap.isConnected() && !imap.isAuthenticated()) {
+    printLine("Opening fresh IMAP session");
+    imap.connect(imapServer, 993, imapStatusCallback);
+    if (imap.isConnected()) {
       imap.authenticate(emailAccount, emailPassword, readymail_auth_password, AWAIT_MODE);
-      if (!imap.isAuthenticated()) {
-        printLine("IMAP authentication failed");
-        imap.logout();
-        imapReconnectAt = now() + ImapReconnectFrequency;
+    }
+
+    if (imap.isAuthenticated()) {
+      if (imap.select("INBOX", false)) {
+        imap.search("SEARCH SUBJECT \"HEAT\"", 20, true, imapDataCallback, AWAIT_MODE);
+        processPendingMailCommands();
+        deleteHandledMessages();
+      } else {
+        printLine("IMAP select failed");
       }
+    } else {
+      printLine("IMAP authentication failed");
     }
 
-    if (imap.isAuthenticated() && imap.getMailbox().name != "INBOX")
-      imap.select("INBOX", false);
-
-    if ((now() > imapUpdateStarted + ReadMailFrequency || imapUpdateStarted == 0) && imap.isAuthenticated() && imap.getMailbox().name == "INBOX")
-    {
-      imapUpdateStarted = now();
-      imap.search("SEARCH UNSEEN", 20, true, imapDataCallback, AWAIT_MODE);
-      deleteHandledMessages();
-    }
+    imap.logout();
+    imap.stop();
   }
 }
