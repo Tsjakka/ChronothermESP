@@ -41,3 +41,10 @@ Secrets.h
 
 # debug information files
 *.dwo
+
+# KiCad: local history, view settings, backups and lock files
+.history/
+*.kicad_prl
+*-backups/
+*.lck
+fp-info-cache
