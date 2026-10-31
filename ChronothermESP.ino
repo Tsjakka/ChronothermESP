@@ -23,7 +23,7 @@
 #include <TimeLib.h>
 #include <sunMoon.h>
 #include <Preferences.h>
-#include <Secrets.h>
+#include "Secrets.h"
 
 #define ENABLE_SMTP
 #define ENABLE_IMAP
@@ -59,7 +59,7 @@ const float Longitude = 0.000000;
 // Change the constants below to adjust the software to your situation
 // ************************************************************************
 // Regional settings
-uint8_t Timezone = 60;                      // UTC difference in minutes (can be changed through web page)
+int Timezone = 60;                          // UTC difference in minutes (can be changed through web page)
 bool UseDST = true;                         // Is Daylight Saving Time observed in your region (can be changed through web page)
 
 // Button commands (GPIO pins)
@@ -79,20 +79,12 @@ const int IDLE_TIME = 600;   // ms between keypresses
 const int MIN_TEMP = 7;
 const int MAX_TEMP = 20;
 
-#define RETRY_PERIOD 30                     // Number of seconds before retrying wifi connection
-#define IDLE_MODE false
-#define AWAIT_MODE true
-#define MAX_CONTENT_SIZE 1024 * 1024        // Maximum size in bytes of the body parts (text and attachment) to be downloaded.
-
-#define ARDUINO_LOOP_STACK_SIZE (8 * 1024)
-
-#define MAX_COMMANDS 10                     // Maximum number of commands to store
-
 Preferences preferences;                    // Instance of the Preferences library
 
 // WiFi stuff
+#define RETRY_PERIOD 30                     // Number of seconds before retrying wifi connection
 const time_t connectPeriod = 90;            // Max period (in s) for setting up a wifi connection
-uint8_t retryPeriod = RETRY_PERIOD;         // Number of seconds before retrying wifi connection
+int retryPeriod = RETRY_PERIOD;             // Number of seconds before retrying wifi connection
 
 // NTP stuff
 const char* NtpServer = "pool.ntp.org";     // A pool of NTP servers
@@ -105,12 +97,23 @@ bool ntpTimeInitialized = false;            // Has the time been set at least on
 bool ntpTimeSet = false;                    // Has the time been set through NTP?
 bool emailSent = false;                     // Has an email been sent because setting the time failed?
 int lastSecond = -1;                        // The second we last did stuff for NTP
+time_t clockUpdateStarted;                  // The time when we started updating the clock
+int clockUpdateDay = 0;                     // The day of the month of the last weekly clock update
+int DST = 0;                                // Daylight Saving Time (0 or 60 minutes, calculated from current date)
+
+// For sunrise and sunset
+int sunCalculationDay = 0;                  // The day of the month sunrise and sunset were last calculated
+sunMoon sm;
+time_t sunRise = 0;
+time_t sunSet = 0;
 
 // For reading mail
+#define IDLE_MODE false
+#define AWAIT_MODE true
+#define MAX_CONTENT_SIZE 1024 * 1024        // Maximum size in bytes of the body parts (text and attachment) to be downloaded.
 WiFiClientSecure imap_client;
 IMAPClient imap(imap_client);
 const time_t LoopPeriod = 180;              // Number of seconds between checks
-std::vector<uint32_t> msgsToDelete;         // Global or static list of messages to delete
 time_t imapUpdateStarted = 0;               // The time when we last checked for email
 time_t imapReconnectAt = 0;                 // The earliest time to retry connecting to IMAP
 const time_t ReadMailFrequency = 300;       // Interval for reading email
@@ -134,20 +137,6 @@ time_t clientConnectedAt;
 const time_t webConnectPeriod = 30;         // Max timeout period (in s) for HTTP connections
 String header;                              // Variable to store the HTTP request
 
-time_t clockUpdateStarted;                  // The time when we started updating the clock
-bool settingSunRiseSunSet = false;          // True when setting the sunrise and sunset
-
-// Daylight Saving Time (0 or 60 minutes, calculated from current date)
-int DST = 0;
-
-// For sunrise and sunset
-sunMoon sm;
-time_t sunRise = 0;
-time_t sunSet = 0;
-
-#define MAX_DEBUG_TEXT 16000
-String debugText = "";                      // A string to hold all debug text
-
 // Commands
 struct HeatCommand {
   int action;         // 0 for OFF, 1 for ON (default), 2 for STATUS, 3 for REMOVE
@@ -156,6 +145,7 @@ struct HeatCommand {
   String time;        // Empty if not provided
 };
 
+#define MAX_COMMANDS 10                     // Maximum number of commands to store
 HeatCommand commands[MAX_COMMANDS];
 int commandCount = 0;
 
@@ -179,9 +169,15 @@ uint8_t MonthStartCommand = 0;
 void printDateTime(time_t date, bool serialOnly = false);
 bool parseHeatCommand(const String& command);
 
+#define MAX_DEBUG_TEXT 16000
+String debugText = "";                      // A string to hold all debug text
+
 // The setup function that initializes everything
 void setup() {
   Serial.begin(115200);
+
+  // Reserve the memory for the debug log while the heap is not yet fragmented
+  debugText.reserve(MAX_DEBUG_TEXT);
 
   // Initialize pins
   pinMode(START_PROGRAM, OUTPUT);
@@ -196,10 +192,10 @@ void setup() {
 
   // Read from flash
   preferences.begin("Chronotherm", false); 
-  retryPeriod = preferences.getUChar("retryPeriod", retryPeriod);
+  retryPeriod = preferences.getInt("retryPeriod", retryPeriod);
   bool dataPresent = preferences.getBool("dataPresent", false);
   if (dataPresent) {
-    Timezone = preferences.getUChar("Timezone", Timezone);
+    Timezone = preferences.getInt("Timezone", Timezone);
     UseDST = preferences.getBool("UseDST", UseDST);
   } else {
     printLine("Using default configuration");
@@ -252,7 +248,7 @@ void setup() {
     delay(retryPeriod * 1000);
     if (retryPeriod < 600) {
       retryPeriod = retryPeriod * 2;
-      preferences.putUChar("retryPeriod", retryPeriod);
+      preferences.putInt("retryPeriod", retryPeriod);
     }
     preferences.end();
     ESP.restart();
@@ -359,10 +355,12 @@ void sendEmail(String subject, String body = "") {
       msg.text.body("Command format: HEAT [ON/OFF/REMOVE] [Temperature/Command to remove] [DD-MM] [HH:MM]\n\nSent by your Chronotherm III");
       msg.html.body("<html><body><p>Command format: HEAT [ON/OFF/REMOVE] [Temperature/Command to remove] [DD-MM] [HH:MM]<br></p><p>Sent by your Chronotherm III</p></body></html>");
     }
+    // The clock runs on local time, the timestamp must be UTC. Without a set clock ReadyMail uses
+    // a fixed date. Gmail sorts on the time of arrival, so such an email is still shown on top.
+    if (ntpTimeInitialized) {
+      msg.timestamp = now() - (Timezone + DST) * 60;
+    }
 
-    configTime(0, 0, "pool.ntp.org");
-    while (time(nullptr) < 100000) delay(100);
-    msg.timestamp = time(nullptr);
     smtp.send(msg);
 
     printDateTime(now(), true);
@@ -394,8 +392,8 @@ int sendNtpPacket(const char* host) {
 time_t getNtpTime() {
   time_t result = 0;
 
-  // Check if a reply is available
-  if (Udp.parsePacket()) {
+  // Check if a reply is available. A shorter packet isn't a valid reply.
+  if (Udp.parsePacket() >= NtpPacketSize) {
     printLine("Packet received");
 
     // We've received a packet, read the data from it
@@ -416,6 +414,12 @@ time_t getNtpTime() {
     // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
     const unsigned long seventyYears = 2208988800UL;
 
+    // A server that isn't synchronized sends 0. Ignore that and wait for the next reply.
+    if (secsSince1900 <= seventyYears) {
+      printLine("Invalid time received");
+      return 0;
+    }
+
     // Subtract seventy years:
     unsigned long epoch = secsSince1900 - seventyYears;
 
@@ -429,32 +433,31 @@ time_t getNtpTime() {
   return result;
 }
 
-// Daylight Saving Time starts at 2 a.m. on the last Sunday in March. The clock is then set 1 hour
-// ahead to 3 o'clock. So this Sunday lasts only 23 hours; an hour shorter than a normal day.
-// Winter time starts at 3 a.m. on the last Sunday in the month of October. The time is
-// then set back 1 hour to 2 a.m. In practice this means that this day lasts 25 hours.
-// This function determines whether DST is active on the date specified by parameter 'time'.
-// Note that it does not look at the time to make this determination, so it returns true for the
-// last Sunday in March, regardless of the time, and false for the last Sunday in October.
+// In the EU, Daylight Saving Time starts at 1 a.m. UTC on the last Sunday in March and ends at
+// 1 a.m. UTC on the last Sunday in October. In the Netherlands that is 2 a.m. local time in
+// March (the clock moves ahead to 3 o'clock) and 3 a.m. local time in October (the clock moves
+// back to 2 o'clock).
+// This function determines whether DST is active at the moment specified by parameter 'utc',
+// which must be UTC time, not local time.
 // Note: dayOfWeek(SUN) = 1, dayOfWeek(MON) = 2, etc.
-bool dstActive(time_t time) {
-  bool result = false;
-  int dayParam = day(time);
-  int monthParam = month(time);
-  int dayOfWeekParam = dayOfWeek(time);
+bool dstActive(time_t utc) {
+  int monthParam = month(utc);
+  if (monthParam < 3 || monthParam > 10) return false;
+  if (monthParam > 3 && monthParam < 10) return true;
 
-  // Check if today is a DST day
-  if ((monthParam == 3 && dayParam >= 25 && dayOfWeekParam <= dayParam - 24) ||
-      (monthParam == 10 && (dayParam < 25 || (dayParam >= 25 && dayParam - dayOfWeekParam <= 23))) ||
-      (monthParam > 3 && monthParam < 10)) {
-    result = true;
-  }
+  // March and October both have 31 days. Find the day of the month of the last Sunday.
+  int dayParam = day(utc);
+  int lastSunday = 31 - ((dayOfWeek(utc) - 1 + 31 - dayParam) % 7);
+  bool afterSwitch = (dayParam > lastSunday) || (dayParam == lastSunday && hour(utc) >= 1);
 
-  return result;
+  // DST starts at the switch in March and ends at the switch in October
+  return (monthParam == 3) ? afterSwitch : !afterSwitch;
 }
 
 // Calculate the next sunrise and sunset
 void setSunriseSunset() {
+  sunCalculationDay = day();
+
   // Initialize sunMoon
   sm.init(Timezone, Latitude, Longitude);
   sunRise = sm.sunRise() + DST * 60;
@@ -466,20 +469,32 @@ void setSunriseSunset() {
   printLine("");
 }
 
-// Two functions to handle debug messages
-void printNoLine(String text) {
-  if (debugText.length() > MAX_DEBUG_TEXT) {
-    debugText = debugText.substring(debugText.length() - MAX_DEBUG_TEXT / 2);
+// Add text to the debug log. The memory for the log is reserved once in setup() and old text is
+// removed in place, so the log never needs new memory. Growing a large String fails silently
+// when the heap is fragmented, which made the log stop.
+void addDebugText(const String& text) {
+  if (debugText.length() + text.length() > MAX_DEBUG_TEXT) {
+    debugText.remove(0, debugText.length() - MAX_DEBUG_TEXT / 2);
   }
   debugText += text;
+}
+
+// The log is shown in the web page. Text from emails must not be read as HTML there.
+String htmlEscape(String text) {
+  text.replace("&", "&amp;");
+  text.replace("<", "&lt;");
+  text.replace(">", "&gt;");
+  return text;
+}
+
+// Two functions to handle debug messages
+void printNoLine(String text) {
+  addDebugText(htmlEscape(text));
   Serial.print(text);
 }
 
 void printLine(String text) {
-  if (debugText.length() > MAX_DEBUG_TEXT) {
-    debugText = debugText.substring(debugText.length() - MAX_DEBUG_TEXT / 2);
-  }
-  debugText += text + "<br>\n";
+  addDebugText(htmlEscape(text) + "<br>\n");
   Serial.println(text);
 }
 
@@ -498,9 +513,9 @@ void printDateTime(time_t date, bool serialOnly) {
 // If dateStr is empty, date defaults to today.
 // If timeStr is empty, time defaults to 0:00.
 bool parseDateTime(String dateStr, String timeStr, struct tm &start) {
-  time_t now_time;
-  time(&now_time);
-  struct tm now = *localtime(&now_time);
+  // The clock runs on local time, so its fields are the local date and time
+  time_t now_time = now();
+  struct tm now = *gmtime(&now_time);
 
   if (!dateStr.isEmpty()) {
     int index = dateStr.indexOf('-');
@@ -534,6 +549,12 @@ bool parseDateTime(String dateStr, String timeStr, struct tm &start) {
 
   start.tm_sec = 0;
   start.tm_year = now.tm_year;
+  start.tm_isdst = 0;
+
+  // A date in an earlier month is in the next year, e.g. a command for January sent in December
+  if (start.tm_mon < now.tm_mon) {
+    start.tm_year++;
+  }
 
   if (start.tm_hour < 0 || start.tm_hour > 23 || start.tm_min < 0 || start.tm_min > 59 ||
       start.tm_mday < 1 || start.tm_mday > 31 || start.tm_mon < 0 || start.tm_mon > 11) {
@@ -644,44 +665,69 @@ void pushButton(int button) {
     delay(IDLE_TIME);
 }
 
-void deleteHandledMessages() {
-  // Delete handled messages
-  if (!msgsToDelete.empty()) {
-    printLine("Deleting messages");
-
-    // Delete in reverse order to keep sequence numbers valid
-    std::sort(msgsToDelete.begin(), msgsToDelete.end(), std::greater<uint32_t>());
-
-    for (uint32_t msgNum : msgsToDelete) {
-      printNoLine("Deleting message ");
-      printLine(String(msgNum));
-      String storeCmd = "STORE " + String(msgNum) + " +FLAGS (\\Deleted)";
-      imap.sendCommand(storeCmd, imapCommandCallback, AWAIT_MODE);
-    }
-    imap.sendCommand("EXPUNGE", imapCommandCallback, AWAIT_MODE);
-    msgsToDelete.clear();
+// Delete the messages of the pending commands. Returns false if the server didn't accept this.
+bool deletePendingMessages() {
+  if (pendingMailCommands.empty()) {
+    return true;
   }
+
+  printLine("Deleting messages");
+  for (PendingMailCommand pendingCommand : pendingMailCommands) {
+    printNoLine("Deleting message ");
+    printLine(String(pendingCommand.msgNum));
+    String storeCmd = "STORE " + String(pendingCommand.msgNum) + " +FLAGS (\\Deleted)";
+    if (!imap.sendCommand(storeCmd, imapCommandCallback, AWAIT_MODE)) {
+      return false;
+    }
+  }
+  return imap.sendCommand("EXPUNGE", imapCommandCallback, AWAIT_MODE);
 }
 
 void processPendingMailCommands() {
-  if (!pendingMailCommands.empty()) {
-    for (PendingMailCommand pendingCommand : pendingMailCommands) {
-      parseHeatCommand(pendingCommand.subject);
-      ReadyMail.printf("%s%s%s\n", "Added message ", String(pendingCommand.msgNum), " for deletion");
-      msgsToDelete.push_back(pendingCommand.msgNum);
-    }
-    pendingMailCommands.clear();
+  for (PendingMailCommand pendingCommand : pendingMailCommands) {
+    parseHeatCommand(pendingCommand.subject);
   }
+  pendingMailCommands.clear();
+}
+
+// Read the commands from email. Gmail can close an idle TLS session between checks while ReadyMail
+// still reports it as connected, so every check uses a fresh IMAP session.
+// The session is closed before the commands are handled, because handling a command sends an email
+// and a TLS session uses a lot of memory, so it's better not to have two at the same time.
+void checkMail() {
+  pendingMailCommands.clear();
+
+  printLine("Opening fresh IMAP session");
+  bool success = false;
+  if (!imap.connect(imapServer, 993, imapStatusCallback)) {
+    printLine("IMAP connection failed");
+  } else if (!imap.authenticate(emailAccount, emailPassword, readymail_auth_password, AWAIT_MODE)) {
+    printLine("IMAP authentication failed");
+  } else if (!imap.select("INBOX", false)) {
+    printLine("IMAP select failed");
+  } else if (!imap.search("SEARCH SUBJECT \"HEAT\"", 20, true, imapDataCallback, AWAIT_MODE)) {
+    printLine("IMAP search failed");
+  } else if (!deletePendingMessages()) {
+    printLine("Deleting messages failed");
+  } else {
+    success = true;
+  }
+
+  if (success) {
+    imap.logout();
+  }
+  imap.stop();
+
+  // Commands whose messages weren't deleted are read again on the next check
+  if (success) {
+    processPendingMailCommands();
+  }
+  pendingMailCommands.clear();
 }
 
 // Parse a command string and add valid commands to the buffer
 bool parseHeatCommand(const String& command) {
   HeatCommand newCommand = {1, -1, "", ""};
-
-  if (commandCount >= MAX_COMMANDS - 1) {
-    sendEmail("Command buffer full");
-    return false;
-  }
 
   // Convert to uppercase for case insensitivity
   String upperCommand = command;
@@ -768,15 +814,28 @@ bool parseHeatCommand(const String& command) {
   }
 
   if (newCommand.action == 0 || newCommand.action == 1) {
+    if (commandCount >= MAX_COMMANDS) {
+      sendEmail("Command buffer full");
+      return false;
+    }
+
     // Add command to the buffer
     commands[commandCount] = newCommand;
     commandCount++;
 
     // Save to preferences
     saveHeatCommands();
-  } else if (newCommand.action == 3 && newCommand.temperature > 0) {
+  } else if (newCommand.action == 3) {
+    // The number of the command to remove is in the temperature field
+    if (newCommand.temperature < 1 || newCommand.temperature > commandCount) {
+      printNoLine("Invalid command number: ");
+      printLine(String(newCommand.temperature));
+      sendEmail("Invalid command number to remove (" + String(newCommand.temperature) + ")");
+      return false;
+    }
+
     // Remove command from buffer
-    for (size_t i = newCommand.temperature - 1; i < commandCount - 1; i++) {
+    for (int i = newCommand.temperature - 1; i < commandCount - 1; i++) {
       commands[i] = commands[i + 1];
     }
     commandCount--;
@@ -785,10 +844,10 @@ bool parseHeatCommand(const String& command) {
     saveHeatCommands();
   }
 
-  // Notify user
+  // Notify user. The numbers are the ones to use with REMOVE.
   String body = "Commands in buffer:\n";
   for (int j = 0; j < commandCount; j++) {
-    body += prettyPrintHeatCommand(commands[j]) + "\n";
+    body += String(j + 1) + ": " + prettyPrintHeatCommand(commands[j]) + "\n";
   }
   sendEmail("Handled command " + upperCommand, body);
 
@@ -807,9 +866,9 @@ void handleHeatCommands() {
     // Check if the date / time has arrived
     parseDateTime(commands[i].date, commands[i].time, start);
 
-    time_t now_time;
-    time(&now_time);
-    time_t start_time = mktime(&start) - (Timezone + DST) * 60;
+    // The clock and the command are both in local time
+    time_t now_time = now();
+    time_t start_time = mktime(&start);
 
     // Skip commands that must be executed sometime in the future
     if (start_time > now_time) {
@@ -851,7 +910,7 @@ void handleWebClient() {
   String text;
 
   if (!clientActive) {
-    client = server.available();            // Listen for incoming clients
+    client = server.accept();               // Listen for incoming clients
     if (client) {                           // If a new client connects
       clientConnectedAt = now();
       printNoLine("New client connection at ");
@@ -870,14 +929,8 @@ void handleWebClient() {
           // If the current line is blank, you got two newline characters in a row.
           // That's the end of the client HTTP request, so send a response
           if (currentLine.length() == 0) {
-            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-            // and a content-type so the client knows what's coming, then a blank line
-            client.println("HTTP/1.1 200 OK");
-            client.println("Content-type:text/html");
-            client.println("Connection: close");
-            client.println();
-
             // Handle user input
+            bool redirect = true;                 // Commands are answered with a redirect to the main page
             if (header.indexOf("GET /up1deg") >= 0) {
               printLine("1 degree up selected");
               webCommand = UpCmd;
@@ -915,7 +968,7 @@ void handleWebClient() {
                       dataPresent = false;
                     } else if (param.indexOf("Timezone") == 0) {
                       temp = value.toInt();
-                      if (temp >= 0 && temp <= 23) Timezone = temp;
+                      if (temp >= -720 && temp <= 840) Timezone = temp;    // In minutes, UTC-12 to UTC+14
                     } else if (param.indexOf("UseDST") == 0) {
                       UseDST = true;
                     } else if (param.indexOf("MonthStartCommand") == 0) {
@@ -954,16 +1007,48 @@ void handleWebClient() {
 
                 // Use putBool for dataPresent and UseDST to match getBool on read
                 preferences.putBool("dataPresent", dataPresent);
-                preferences.putUChar("Timezone", Timezone);
+                preferences.putInt("Timezone", Timezone);
                 preferences.putBool("UseDST", UseDST);
 
                 // Add new command to the queue
                 if (MonthStartCommand != 0 && DayStartCommand != 0) {
                   String command = "HEAT ON " + String(DayStartCommand) + "-" + String(MonthStartCommand) + " " + String(HourStartCommand) + ":" + String(MinuteStartCommand);
                   parseHeatCommand(command);
+
+                  // Clear the form fields, so the next submit doesn't add the command again
+                  MonthStartCommand = 0;
+                  DayStartCommand = 0;
+                  HourStartCommand = 0;
+                  MinuteStartCommand = 0;
                 }
               }
+            } else {
+              redirect = false;
             }
+
+            if (redirect) {
+              // Send the browser back to the main page, so the address bar no longer holds the
+              // command. Otherwise reloading or reopening the page would execute it again.
+              client.println("HTTP/1.1 303 See Other");
+              client.println("Location: /");
+              client.println("Connection: close");
+              client.println();
+
+              header = "";
+              client.stop();
+              printLine("Client redirected to main page");
+              printLine("");
+
+              clientActive = false;
+              return;
+            }
+
+            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+            // and a content-type so the client knows what's coming, then a blank line
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println("Connection: close");
+            client.println();
 
             time_t t_now = now();
 
@@ -1014,10 +1099,16 @@ void handleWebClient() {
             client.println("<p><a href=\"/start\"><button class=\"button\">Start program</button></a></p>");
             client.println("<p><a href=\"/\"><button class=\"button\">Refresh</button></a></p><br>");
 
+            client.print("<p>Free heap: ");
+            client.print(ESP.getFreeHeap());
+            client.print(" bytes, largest free block: ");
+            client.print(ESP.getMaxAllocHeap());
+            client.println(" bytes</p>");
+
             // Print the form for uploading settings
             client.println("<form action=\"/params\">");
             client.println("<p>Revert to default values after reset:<input type=\"checkbox\" name=\"Revert\"></p>");
-            client.print("<p>Timezone:<input type=\"text\" name=\"Timezone\" value=\"");
+            client.print("<p>Timezone (minutes from UTC):<input type=\"text\" name=\"Timezone\" value=\"");
             client.print(Timezone);
             client.println("\"></p>");
             client.print("<p>Observe DST:<input type=\"checkbox\" name=\"UseDST\"");
@@ -1066,11 +1157,16 @@ void handleWebClient() {
       } else {
         // The client is connected but no data is available. Time out if this takes too long.
         if (now() > clientConnectedAt + webConnectPeriod) {
+          // Discard the partial request, so it doesn't use memory or end up in the next request
+          header = "";
+          client.stop();
           clientActive = false;
           printLine("Client connection timed out");
         }
       }
     } else {
+      header = "";
+      client.stop();
       clientActive = false;
       printLine("Client no longer connected");
     }
@@ -1158,8 +1254,12 @@ void loop() {
   } else {
     // Make sure the clock is updated once a week on Sunday mornings.
     // This also allows for DST to be set correctly. Note that time can move
-    // back or forward by one hour.
-    if (dayOfWeek(now()) == 1 && hour() == 1 && minute() == 10 && second() == 0) {
+    // back or forward by one hour. This must happen after the switch to or from
+    // DST (2 a.m. winter time, 3 a.m. summer time), so we do it at 3:30.
+    // Any time after 3:30 will do, so the update isn't missed when the loop is busy at 3:30.
+    // The day is remembered, so it's done only once when the clock moves back to 2:30.
+    if (dayOfWeek(now()) == 1 && (hour() > 3 || (hour() == 3 && minute() >= 30)) && clockUpdateDay != day()) {
+      clockUpdateDay = day();
       printNoLine("Invalidating time at ");
       printDateTime(now());
       printLine("");
@@ -1171,70 +1271,46 @@ void loop() {
 
   time_t t_now = now();  // The number of seconds since Jan 1 1970
 
-  // Every day at two thirty a.m. calculate the next sunrise and sunset
-  if (!settingSunRiseSunSet && hour() == 2 && minute() == 30 && second() == 0) {
-    settingSunRiseSunSet = true;
+  // Every day at two thirty a.m. calculate the next sunrise and sunset. Any time after 2:30 will
+  // do, so it isn't missed when the loop is busy at 2:30.
+  if (ntpTimeInitialized && sunCalculationDay != day() && (hour() > 2 || (hour() == 2 && minute() >= 30))) {
     printNoLine("Calculating sunrise and sunset at ");
     printDateTime(t_now);
     printLine("");
 
     setSunriseSunset();
-  } else if (settingSunRiseSunSet && second() != 0) {
-    settingSunRiseSunSet = false;
   }
 
   // Handle user input
   handleWebClient();
   handleWebCommand();
-  handleHeatCommands();
+
+  // Commands can only be handled when the clock is set
+  if (ntpTimeInitialized) {
+    handleHeatCommands();
+  }
 
   // Catch lost Wi-Fi connections
   if (!WiFi.isConnected()) {
-    imap.logout();
     WiFi.disconnect();
     Serial.println("No wifi connection, rebooting");
     delay(retryPeriod * 1000);
     if (retryPeriod < 600) {
       retryPeriod = retryPeriod * 2;
-      preferences.putUChar("retryPeriod", retryPeriod);
+      preferences.putInt("retryPeriod", retryPeriod);
     }
     preferences.end();
     ESP.restart();
   } else {
     if (retryPeriod > RETRY_PERIOD) {
       retryPeriod = RETRY_PERIOD;
-      preferences.putUChar("retryPeriod", retryPeriod);
+      preferences.putInt("retryPeriod", retryPeriod);
     }
   }
 
+  // Check for commands by email
   if (ntpTimeInitialized && (now() > imapUpdateStarted + ReadMailFrequency || imapUpdateStarted == 0)) {
     imapUpdateStarted = now();
-    pendingMailCommands.clear();
-
-    // Gmail can close an idle TLS session between polls while ReadyMail still
-    // reports it as connected. Use a fresh IMAP session for each mail check.
-    imap.stop();
-    delay(250);
-
-    printLine("Opening fresh IMAP session");
-    imap.connect(imapServer, 993, imapStatusCallback);
-    if (imap.isConnected()) {
-      imap.authenticate(emailAccount, emailPassword, readymail_auth_password, AWAIT_MODE);
-    }
-
-    if (imap.isAuthenticated()) {
-      if (imap.select("INBOX", false)) {
-        imap.search("SEARCH SUBJECT \"HEAT\"", 20, true, imapDataCallback, AWAIT_MODE);
-        processPendingMailCommands();
-        deleteHandledMessages();
-      } else {
-        printLine("IMAP select failed");
-      }
-    } else {
-      printLine("IMAP authentication failed");
-    }
-
-    imap.logout();
-    imap.stop();
+    checkMail();
   }
 }
