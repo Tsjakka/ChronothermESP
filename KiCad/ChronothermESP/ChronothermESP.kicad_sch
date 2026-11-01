@@ -505,6 +505,148 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "power:+3V3"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "+3V3"
+				(at 0 3.556 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+3V3\""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "+3V3_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27)
+						(xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54)
+						(xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0)
+						(xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+3V3_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:GND"
 			(power global)
 			(pin_numbers
@@ -1775,6 +1917,222 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Connector_Generic:Conn_01x04"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x04"
+				(at 0 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x04_1_1"
+				(rectangle
+					(start -1.27 3.81)
+					(end 1.27 -6.35)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(symbol
 		(lib_id "ChronothermESP:ESP32-C3_SuperMini")
@@ -1784,7 +2142,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0ee7ed72-ddfb-4f9e-937f-659551ee7af6")
+		(uuid "8e458519-f465-4edc-a6e4-298a6dc3646e")
 		(property "Reference" "U1"
 			(at 45.72 68.58 0)
 			(effects
@@ -1829,52 +2187,52 @@
 			)
 		)
 		(pin "8"
-			(uuid "44f03636-97aa-45fd-b7f0-bb2f3be8d916")
+			(uuid "db6948ce-69d8-4357-9dbb-3f9e7c303c87")
 		)
 		(pin "6"
-			(uuid "bc77d650-c00d-4d3f-9036-837ea713504a")
+			(uuid "c63778bc-8f68-4ce9-8af2-5d6d622afbf6")
 		)
 		(pin "7"
-			(uuid "8a7494c1-7f8b-4306-95e1-ed5f4dece46e")
+			(uuid "be2cfb09-1450-4dc8-885b-08fb9415211a")
 		)
 		(pin "1"
-			(uuid "b61de031-0209-4ee3-927c-4bb36e170fc6")
+			(uuid "a4496098-1a25-4f76-9c29-b012ca442c8a")
 		)
 		(pin "2"
-			(uuid "16a8c499-dee0-4e2f-a4e2-d0248f8f5e9d")
+			(uuid "d00d2775-8650-4560-b3f7-61abe369875d")
 		)
 		(pin "3"
-			(uuid "d7567e1b-a385-4654-a3f7-719544efef29")
+			(uuid "15f454d1-3b16-412e-ba86-6f34c953e6f5")
 		)
 		(pin "4"
-			(uuid "43c8685d-5ea9-4e8f-be7e-8b3f075d08c4")
+			(uuid "8509a12d-5608-4c6f-8544-11d029cfe81a")
 		)
 		(pin "5"
-			(uuid "9fa001ea-8cdc-480e-b488-e156f0da6b04")
+			(uuid "1efdeb10-5dc8-4082-b809-20fa99b11595")
 		)
 		(pin "9"
-			(uuid "822757cb-82c9-43fe-b9c5-9c74d56005cb")
+			(uuid "0ea0b5d9-1ca2-4c52-8652-cca77f9db091")
 		)
 		(pin "10"
-			(uuid "0bde1c19-7e73-4cde-94db-fc03514ea17d")
+			(uuid "fde934f2-3c07-4110-917e-af869cb97e1a")
 		)
 		(pin "11"
-			(uuid "5788b02c-a492-4bae-a2a0-6ecfeac5770e")
+			(uuid "28665aa9-9022-4956-96d6-9985db4f8e5c")
 		)
 		(pin "12"
-			(uuid "906eaedd-6e84-4ee9-a21a-87596898d44d")
+			(uuid "eb333387-bac4-43c1-8ca1-169f9309f238")
 		)
 		(pin "13"
-			(uuid "99ce8a06-d882-4948-9e65-123f124c684f")
+			(uuid "c5078513-152e-4110-9720-130b1b5175ff")
 		)
 		(pin "14"
-			(uuid "c539ea44-0960-42ab-a09a-7954f66d4687")
+			(uuid "9291f26f-e4f3-4f8e-945e-c476f0b3dfaa")
 		)
 		(pin "15"
-			(uuid "489f0d3a-be17-45c9-858a-bfa207852035")
+			(uuid "a9590e8e-0c51-4fab-b356-b994e37a45a7")
 		)
 		(pin "16"
-			(uuid "b1bfaa96-9157-4545-8cac-6be2a92a83a9")
+			(uuid "cfe9b3d2-bea2-4c02-8dc5-d9a83d3dc173")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -1894,7 +2252,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "94f1e667-8b4a-4d26-a96d-b8e74cecf760")
+		(uuid "e119961d-9c1b-4795-957c-f8d9689b1810")
 	)
 	(symbol
 		(lib_id "power:+5V")
@@ -1904,7 +2262,7 @@
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "2d1fcb29-2536-4993-834b-c30bf5e2f0fd")
+		(uuid "0b3fe347-3f9f-4ae6-b6b4-4078c04ebe55")
 		(property "Reference" "#PWR01"
 			(at 25.4 77.47 0)
 			(effects
@@ -1950,7 +2308,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "19b385b8-bfac-4f53-bb03-90ab4785522c")
+			(uuid "ee88a8c0-9ef6-4691-a74c-eb4155f8716b")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -1961,9 +2319,81 @@
 			)
 		)
 	)
-	(no_connect
-		(at 30.48 78.74)
-		(uuid "272da060-4c4c-497f-9493-d71b9149c6c3")
+	(wire
+		(pts
+			(xy 30.48 78.74)
+			(xy 25.4 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "904406c3-36ea-47e7-a1b4-6ea2d8ebb03a")
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 25.4 78.74 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "e6fa946b-ada1-4fe7-8e07-d5b2ab3f6b7c")
+		(property "Reference" "#PWR02"
+			(at 25.4 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 25.4 75.184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 25.4 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 25.4 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 25.4 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "75cba6bf-0e8c-4db6-8307-fe1bea4906d0")
+		)
+		(instances
+			(project "ChronothermESP"
+				(path "/72f0ab0e-c398-414e-a02c-584533cdc2c6"
+					(reference "#PWR02")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(wire
 		(pts
@@ -1974,7 +2404,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "20b99b5a-6567-4d52-9bf5-4df3d2a7ecfd")
+		(uuid "2d1c7b36-91c9-4052-984d-f088fce92a8a")
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -1984,8 +2414,8 @@
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "968646cd-cccd-405b-b885-b608104a6c9c")
-		(property "Reference" "#PWR02"
+		(uuid "854202ad-1b7b-4d23-a65c-6a9a124f2f0e")
+		(property "Reference" "#PWR03"
 			(at 25.4 110.49 0)
 			(effects
 				(font
@@ -2030,12 +2460,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "dfa667e5-230b-41cd-a9ff-85fb394c9ab7")
+			(uuid "3f95dc31-1ee0-478e-b0d8-4d0491d440a7")
 		)
 		(instances
 			(project "ChronothermESP"
 				(path "/72f0ab0e-c398-414e-a02c-584533cdc2c6"
-					(reference "#PWR02")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -2050,7 +2480,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "24bdd0b0-9b37-4baf-897c-5c8553f79dab")
+		(uuid "a59c270a-40a9-4ce1-b271-7b517cd97d2a")
 	)
 	(label "START"
 		(at 66.04 73.66 0)
@@ -2060,7 +2490,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "2083d961-b923-4e71-a390-ba821dbd88e8")
+		(uuid "aadcd693-2fd3-4ecd-9e13-c7715808332e")
 	)
 	(wire
 		(pts
@@ -2071,7 +2501,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "4f87aa2d-f3e2-4191-9304-bef25673bd8b")
+		(uuid "4eb6a902-11d7-4c28-afeb-07092605192e")
 	)
 	(label "HOLD"
 		(at 66.04 76.2 0)
@@ -2081,11 +2511,11 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "f638c345-577f-4c7e-b351-0c10081097b9")
+		(uuid "6a6e1d56-59a2-4ab7-a2c1-723b2ed4169d")
 	)
 	(no_connect
 		(at 60.96 78.74)
-		(uuid "77b3dde7-f742-4d9d-b898-bc58b9eb2a83")
+		(uuid "7b32fdad-ecab-4d2c-a42c-91f50693e307")
 	)
 	(wire
 		(pts
@@ -2096,7 +2526,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "82770ba4-aa76-4eff-aa4a-1012543abff3")
+		(uuid "1dde306d-8aa1-4d27-baaf-f51faee1f87b")
 	)
 	(label "WARMER"
 		(at 66.04 81.28 0)
@@ -2106,7 +2536,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "b26f97c2-8292-41ff-932e-28da38af78d1")
+		(uuid "5de65029-2455-433e-af21-85fb5854e1fe")
 	)
 	(wire
 		(pts
@@ -2117,7 +2547,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "64473c5e-6811-4b21-8bfb-d2ab9a9d9e83")
+		(uuid "67d67327-8f43-45b4-ad2f-6a305e5b36ba")
 	)
 	(label "COOLER"
 		(at 66.04 83.82 0)
@@ -2127,39 +2557,73 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "659f407e-b9f0-4974-82fb-8066ac9e9411")
+		(uuid "67edf42c-0467-4050-94fa-f9874677918a")
 	)
 	(no_connect
 		(at 60.96 86.36)
-		(uuid "786b3ac4-c592-4840-82e4-00e09a5185fb")
+		(uuid "52e9317b-ec4b-4561-8553-c4dddc0edf8d")
 	)
-	(no_connect
-		(at 60.96 88.9)
-		(uuid "9f3cd1d2-4dec-4e24-a7d1-5acee72b59b5")
+	(wire
+		(pts
+			(xy 60.96 88.9)
+			(xy 66.04 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba91efb4-5af2-4e09-8b22-a36d225a373c")
 	)
-	(no_connect
-		(at 60.96 91.44)
-		(uuid "3461f8cf-6791-4579-87fd-5e96534ef6ab")
+	(label "SDA"
+		(at 66.04 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "78cdc985-9b5d-41a1-a251-fa3d21578882")
+	)
+	(wire
+		(pts
+			(xy 60.96 91.44)
+			(xy 66.04 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "452975c3-bd25-4e92-8890-1efd4583ec76")
+	)
+	(label "SCL"
+		(at 66.04 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "59a4e76a-6713-48b2-94b2-1ceeb56eced7")
 	)
 	(no_connect
 		(at 60.96 93.98)
-		(uuid "6b647fa9-6756-4c7f-8721-b0edfec1a118")
+		(uuid "b765476a-81b6-4fec-a3c6-e987895601d6")
 	)
 	(no_connect
 		(at 60.96 96.52)
-		(uuid "fcc8c221-9ff1-4665-b8aa-63df0bcfc77c")
+		(uuid "dfb10e0d-5704-4810-927c-1b5b099ddd1d")
 	)
 	(no_connect
 		(at 60.96 99.06)
-		(uuid "0b43fa03-e0c6-495f-8a49-f76b65e73c6e")
+		(uuid "4b28ae27-2df1-4af4-89d5-266e9ad62dcf")
 	)
 	(no_connect
 		(at 60.96 101.6)
-		(uuid "2602623d-8ff9-4782-95bb-fedaef47ae6f")
+		(uuid "ce6cb7ff-0f63-4cf1-bd42-c40db7d4e98d")
 	)
 	(no_connect
 		(at 60.96 104.14)
-		(uuid "b4a8b48c-db7e-49ec-9331-760bb63fae84")
+		(uuid "cceebae6-564a-4bd3-9622-153d5aabe696")
 	)
 	(symbol
 		(lib_id "Transistor_BJT:BC547")
@@ -2169,7 +2633,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "22f5b4bf-0a6a-4676-9ec9-9ce4c5a48781")
+		(uuid "e8e87071-8f79-4d89-9aa7-4a3c59a13ba6")
 		(property "Reference" "Q1"
 			(at 96.52 100.33 0)
 			(effects
@@ -2216,13 +2680,13 @@
 			)
 		)
 		(pin "1"
-			(uuid "aaf66a6b-5504-41e1-b6cc-d88d6a1d4a0a")
+			(uuid "60ad8f41-2e60-4a8c-861c-05f7727defc0")
 		)
 		(pin "2"
-			(uuid "2410d30a-e78b-44f0-84e9-05fd04008c93")
+			(uuid "3b310f07-f122-4487-9082-4ee65ffec975")
 		)
 		(pin "3"
-			(uuid "9e06472f-e85d-418f-b6b3-bdd38835d528")
+			(uuid "a70e31fb-2d74-4240-9a15-2c504c65f73a")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -2241,7 +2705,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "8c67bea2-e71a-4476-81f3-ba7193b483e4")
+		(uuid "f0f1e541-4cd9-4524-924c-a539757a729a")
 		(property "Reference" "R1"
 			(at 78.74 99.06 90)
 			(effects
@@ -2286,10 +2750,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "6d1b153a-92e6-4f8b-baca-5c7d54d84b5b")
+			(uuid "2fa4af4d-2669-44b3-ae55-cb2a8cbcdcd0")
 		)
 		(pin "2"
-			(uuid "bef13a30-1e81-40cf-a7a3-c15c69a82e4d")
+			(uuid "884c2077-8e47-4d4b-9363-31a731d08540")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -2309,7 +2773,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "19dbd45c-795a-4337-a88a-5116577accca")
+		(uuid "8a516c01-6c12-4e97-9fab-12b3feddb162")
 	)
 	(wire
 		(pts
@@ -2320,7 +2784,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "69607fce-22cd-4060-a41b-66b9a4b306c1")
+		(uuid "19d0fe04-a0c5-452e-a0bb-ca81a9342172")
 	)
 	(label "START"
 		(at 72.39 101.6 180)
@@ -2330,7 +2794,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "69a15699-4b06-419d-b82e-1ccf14ffc80d")
+		(uuid "2912859f-9aee-40a4-8dc4-38195a017123")
 	)
 	(wire
 		(pts
@@ -2341,7 +2805,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2acfdbdc-d91d-40d3-95df-c0aca0cd2d08")
+		(uuid "18a91f53-6825-4f47-b18a-519526c482f5")
 	)
 	(label "KEY_START"
 		(at 93.98 91.44 90)
@@ -2351,7 +2815,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a8cb7606-50e9-478b-bfbd-bfd7c6e17b76")
+		(uuid "29a4652e-8f25-4345-be77-0e904014ded4")
 	)
 	(symbol
 		(lib_id "Transistor_BJT:BC547")
@@ -2361,7 +2825,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7d6352c6-7193-4725-af81-fefbd6104a39")
+		(uuid "02937435-b9e0-4ef5-851d-74947b6cca35")
 		(property "Reference" "Q2"
 			(at 134.62 100.33 0)
 			(effects
@@ -2408,13 +2872,13 @@
 			)
 		)
 		(pin "1"
-			(uuid "76cf6117-5921-4fb7-aba2-3dc7381e365a")
+			(uuid "6353b33c-3052-4388-a758-9677759d797e")
 		)
 		(pin "2"
-			(uuid "8ff96870-2d58-4675-bdf4-a667b7d3c6b2")
+			(uuid "8d62f768-9fa4-4dc3-a185-a57e64acf393")
 		)
 		(pin "3"
-			(uuid "44152273-db3b-4f9c-a704-b15599095c1e")
+			(uuid "df538cb2-acc4-4908-bb52-4c4c2e5be67c")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -2433,7 +2897,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ecd93350-6c70-4f09-a2bf-7ab057d290ba")
+		(uuid "e0321723-45f4-4d31-b3cb-867fc45a1e74")
 		(property "Reference" "R2"
 			(at 116.84 99.06 90)
 			(effects
@@ -2478,10 +2942,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "5f0a87bd-7a78-41b4-b098-c63eb182e182")
+			(uuid "1137b6bf-0dd6-45a8-95f8-61674c75199a")
 		)
 		(pin "2"
-			(uuid "6a73e5fd-8241-4ebd-a67f-b6b0c119ed67")
+			(uuid "b52744d0-5d1d-4276-92b0-20e81ea33be4")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -2501,7 +2965,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "1ace908b-54e6-4afc-9758-2a8886e2cbab")
+		(uuid "30c70a09-a60a-4518-94c5-2fbb67632b71")
 	)
 	(wire
 		(pts
@@ -2512,7 +2976,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "5180603f-ee21-4205-9d33-a2236b9bcfbb")
+		(uuid "30e0815d-02d0-4034-abd8-a2d5ffe1be6b")
 	)
 	(label "HOLD"
 		(at 110.49 101.6 180)
@@ -2522,7 +2986,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "60cea282-2468-4dfc-ab10-2ec1ffd84d20")
+		(uuid "c9e092ac-5443-4369-81d5-cbea0f73516e")
 	)
 	(wire
 		(pts
@@ -2533,7 +2997,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "81ebfbb2-9461-41a2-b9a3-770d78e2236d")
+		(uuid "cf9f9397-0559-42e6-a4f8-af583c3e35a1")
 	)
 	(label "KEY_HOLD"
 		(at 132.08 91.44 90)
@@ -2543,7 +3007,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "9b0d957d-8f3b-49c5-bb67-a94e980f5ca3")
+		(uuid "738fbeb7-e6d7-42eb-b3b1-d2b437a496e1")
 	)
 	(symbol
 		(lib_id "Transistor_BJT:BC547")
@@ -2553,7 +3017,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "ed140da2-5f2e-4f43-9066-633136d007e0")
+		(uuid "de571715-059d-45b1-93fb-2cbfa014cc1d")
 		(property "Reference" "Q3"
 			(at 172.72 100.33 0)
 			(effects
@@ -2600,13 +3064,13 @@
 			)
 		)
 		(pin "1"
-			(uuid "e0696916-f7a7-475c-a821-012e1c8650e1")
+			(uuid "ddbc027b-8e56-4ab2-af97-65d2547e82d0")
 		)
 		(pin "2"
-			(uuid "a29f75b9-4a98-460f-8e71-68e0f0042bdc")
+			(uuid "bd4febcd-ff29-456c-baf2-c80f00517273")
 		)
 		(pin "3"
-			(uuid "e70408fb-3915-4851-b84d-a9636ca9b59a")
+			(uuid "f8af5887-ede1-4cfc-861f-47e18f63430a")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -2625,7 +3089,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "cb0f5a5c-c040-4535-b774-2a81a20130e0")
+		(uuid "5720cea2-5606-40d4-b3c3-84225f1abf9f")
 		(property "Reference" "R3"
 			(at 154.94 99.06 90)
 			(effects
@@ -2670,10 +3134,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "94e1a229-8f0b-414d-ae89-2faebfb0f8b7")
+			(uuid "bf5498fe-663b-47f2-a12e-94e1d4e1e00d")
 		)
 		(pin "2"
-			(uuid "eb81c958-5e06-4eb8-a143-05e4c19a3414")
+			(uuid "a1d07ee5-84b9-4292-a86b-78c91cb23b37")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -2693,7 +3157,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8b89be0a-4aae-4dc3-81b1-042104423b31")
+		(uuid "b9dab962-9ac2-46e0-b599-3fdda4f2944d")
 	)
 	(wire
 		(pts
@@ -2704,7 +3168,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ce8926bb-3ee3-4b39-b29f-144b77b197cd")
+		(uuid "b1fe3273-5704-4713-916f-293e550f5b6e")
 	)
 	(label "WARMER"
 		(at 148.59 101.6 180)
@@ -2714,7 +3178,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "755b07e2-a32d-4eb9-bb82-03c12cb16bc8")
+		(uuid "5db931dd-3dd7-4440-a463-8e2cac417005")
 	)
 	(wire
 		(pts
@@ -2725,7 +3189,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "cee21c7c-e0b0-489f-969a-2abdd301edde")
+		(uuid "d4f46de4-4428-4f00-8366-cbd5c275babe")
 	)
 	(label "KEY_WARMER_COOLER"
 		(at 170.18 91.44 90)
@@ -2735,7 +3199,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "0bed7ef1-e4a3-4e63-82da-772bedf35c1f")
+		(uuid "4b769a62-959d-4e0a-9c92-42a57d0df446")
 	)
 	(symbol
 		(lib_id "Transistor_BJT:BC547")
@@ -2745,7 +3209,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c19eb92a-ee7d-4844-ac50-0b00218583f8")
+		(uuid "169fcd3b-5f0d-48ed-aa83-a8934ef13421")
 		(property "Reference" "Q4"
 			(at 210.82 100.33 0)
 			(effects
@@ -2792,13 +3256,13 @@
 			)
 		)
 		(pin "1"
-			(uuid "82a38f8f-b176-42d7-bf62-9a3cccf8348e")
+			(uuid "a8eb5b33-483d-4da1-a853-e395da3a383a")
 		)
 		(pin "2"
-			(uuid "845f7feb-9131-4c48-8abd-894ac1e9e2e2")
+			(uuid "98223121-a84a-4789-87a4-b5cec52c737b")
 		)
 		(pin "3"
-			(uuid "5359c5d9-3a09-49ba-9348-7fcaed893d4b")
+			(uuid "3d341123-e7e3-42b6-8331-a045d9886125")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -2817,7 +3281,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "fe1f99e2-789c-443a-9a1f-c5e2afc099bf")
+		(uuid "b3036898-ae76-4665-9c83-524e19771a18")
 		(property "Reference" "R4"
 			(at 193.04 99.06 90)
 			(effects
@@ -2862,10 +3326,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "e787227a-0ded-459f-8c02-47d35d776c48")
+			(uuid "356d565d-2afa-4745-8865-e9d3ddc6d2ca")
 		)
 		(pin "2"
-			(uuid "4ca41916-1186-4530-8261-03c082a66183")
+			(uuid "80a13df7-c5de-4aab-87c8-849f66218a3f")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -2885,7 +3349,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6c34182b-2f4e-44c3-84a6-88dc0aff3222")
+		(uuid "65b9c6c7-951b-45e9-8aec-6577670b002e")
 	)
 	(wire
 		(pts
@@ -2896,7 +3360,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9e59be6b-60c9-4939-9873-e4c070ba7288")
+		(uuid "a5a52359-4b34-4edd-a39b-4b64bcbfc108")
 	)
 	(label "COOLER"
 		(at 186.69 101.6 180)
@@ -2906,7 +3370,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "9d3578eb-5947-467a-93f1-2d7ebd00face")
+		(uuid "83e8997b-fc61-4519-88e0-9e1d08917b16")
 	)
 	(wire
 		(pts
@@ -2917,7 +3381,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "97044f00-3109-461a-87da-8ecf798cf692")
+		(uuid "f8d5309a-7384-4553-90d4-b8efaaf93669")
 	)
 	(label "KEY_WARMER_COOLER"
 		(at 208.28 91.44 90)
@@ -2927,7 +3391,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "e0a81c8e-97c1-4978-bf9f-8af400fa3b4e")
+		(uuid "533679fb-4dea-4b88-9c44-daa13ab8b557")
 	)
 	(wire
 		(pts
@@ -2938,7 +3402,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fac27873-05af-4967-99b5-186b097929a1")
+		(uuid "2de188ae-daf4-467e-adf8-b3f6caf07886")
 	)
 	(wire
 		(pts
@@ -2949,7 +3413,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "3d0db54e-1696-4db9-a9fb-f800697f3b94")
+		(uuid "73490a3d-9012-47bf-a7f2-9f6824523c36")
 	)
 	(wire
 		(pts
@@ -2960,7 +3424,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fd400421-ba6e-45e9-b30a-3dc4a6cd3945")
+		(uuid "4f9d17d3-28e2-4394-beb3-edfd263f22c4")
 	)
 	(wire
 		(pts
@@ -2971,7 +3435,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "32b8160d-2b02-4c4e-a66a-1227e94efd19")
+		(uuid "43bc0348-b567-4c7a-a67c-a9a74993cbd7")
 	)
 	(wire
 		(pts
@@ -2982,13 +3446,13 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d08d134b-47c8-4413-a825-1990355d7789")
+		(uuid "6682a53c-5b88-4a4f-a4b5-298445357c3c")
 	)
 	(junction
 		(at 132.08 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "35a1b134-ee9a-41dc-8127-5f2476707e3f")
+		(uuid "efa1e96d-5d0c-4850-b96e-632780e4ad57")
 	)
 	(symbol
 		(lib_id "Device:R")
@@ -2998,7 +3462,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "2d1a0b36-2c5e-44cf-ba1b-e8e7961d7d62")
+		(uuid "6ae26bde-c8f2-45ca-8944-121df0a6fa70")
 		(property "Reference" "R5"
 			(at 134.62 120.65 0)
 			(effects
@@ -3017,7 +3481,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 130.302 121.92 0)
 			(effects
 				(font
@@ -3045,10 +3509,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "68eca0c1-2d84-49d6-b88f-ab1a3508a3f7")
+			(uuid "7d7ca880-f91e-4c78-8877-d378fd54af04")
 		)
 		(pin "2"
-			(uuid "07eb4bef-668b-4c5a-a01f-1b348d59e18b")
+			(uuid "1e87876c-626f-4901-85d6-a95f888d0663")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -3068,7 +3532,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "43a36f6c-647a-45c8-96ee-87fb021778b1")
+		(uuid "0cfba2be-5bb2-40af-b2ba-008445eac4c5")
 	)
 	(wire
 		(pts
@@ -3079,7 +3543,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e8812857-1b10-4b61-a55a-198354b1d978")
+		(uuid "b0fcbf2a-9179-4413-a8aa-6125876a7a26")
 	)
 	(label "KEY_REF123"
 		(at 132.08 128.27 270)
@@ -3089,7 +3553,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "d0c20186-0121-4233-acbd-72652f94e59b")
+		(uuid "e09072a2-d71a-4eb7-bec0-462a228b49c1")
 	)
 	(symbol
 		(lib_id "Device:R")
@@ -3099,7 +3563,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f4059482-6ae5-4e9f-b912-ba4d265e70a1")
+		(uuid "d4215eac-fd4b-4b88-8bfd-9a4834d142c0")
 		(property "Reference" "R6"
 			(at 210.82 120.65 0)
 			(effects
@@ -3118,7 +3582,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 206.502 121.92 0)
 			(effects
 				(font
@@ -3146,10 +3610,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "166623ed-173d-42c9-be31-198df0e79afc")
+			(uuid "1edfc9e8-745d-4d70-8868-59ce0e8c232b")
 		)
 		(pin "2"
-			(uuid "9d73e598-4876-4ef1-b6c3-413875f4a38c")
+			(uuid "5b94d49f-7f7a-445f-b913-cdd957fea9ac")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -3169,7 +3633,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "90cfd41b-1dfd-40bd-b1be-670211280332")
+		(uuid "a027bbab-2901-4d5d-9aea-9903143ecb22")
 	)
 	(wire
 		(pts
@@ -3180,7 +3644,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "23ba9fef-184a-4955-8914-887c4f63d34e")
+		(uuid "5de96182-70f1-44f4-929d-a41c212e20e3")
 	)
 	(label "KEY_REF4"
 		(at 208.28 128.27 270)
@@ -3190,7 +3654,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "07c15560-058c-4c36-8401-f23cdccd2be7")
+		(uuid "6e1cb138-6e08-43e5-ace1-c9eda927744a")
 	)
 	(symbol
 		(lib_id "Connector:Screw_Terminal_01x06")
@@ -3200,7 +3664,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "dfe31d29-9e0f-4520-9cb9-ae4784855916")
+		(uuid "2e673164-57f7-4bbc-a2c2-5d82a3b50105")
 		(property "Reference" "J1"
 			(at 251.46 93.98 0)
 			(effects
@@ -3217,7 +3681,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-6-5.08_1x06_P5.08mm_Horizontal"
+		(property "Footprint" "Connector_Phoenix_MC:PhoenixContact_MC_1,5_6-G-3.81_1x06_P3.81mm_Horizontal"
 			(at 251.46 101.6 0)
 			(effects
 				(font
@@ -3245,22 +3709,22 @@
 			)
 		)
 		(pin "1"
-			(uuid "6218ddc9-78e9-4dcf-814f-aad9d26e5514")
+			(uuid "851303e9-5c11-4c07-9aa7-6c2bffb432e6")
 		)
 		(pin "2"
-			(uuid "b450c825-ce4d-4076-91e8-65bc818b8fee")
+			(uuid "14402c0b-6355-45ea-9aac-79a2721b77cd")
 		)
 		(pin "3"
-			(uuid "9f267e98-6dbb-4a15-befd-2501615f40dc")
+			(uuid "46235e1f-071b-49c0-ba4f-8b63d1588a25")
 		)
 		(pin "4"
-			(uuid "97aab816-bd7e-42b4-912e-07d48e0bf42b")
+			(uuid "e1df86ec-7008-41aa-96d6-044ab9dba272")
 		)
 		(pin "5"
-			(uuid "b72bd062-eeb9-48c1-9305-42ae85000613")
+			(uuid "3afda9b1-1489-45b6-9f37-3bf89e4fd010")
 		)
 		(pin "6"
-			(uuid "d3476a49-7cd1-4b50-a584-cdb54789b6fe")
+			(uuid "2bb4f411-681a-48e1-8b4b-fa8eff26ad54")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -3280,7 +3744,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a384d7af-c2d6-4cf6-9314-20f2cdd2bd69")
+		(uuid "a7ae5a58-879e-44d3-9f60-97b17859f011")
 	)
 	(label "KEY_HOLD"
 		(at 241.3 96.52 180)
@@ -3290,7 +3754,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "074aa605-f052-4e53-9a6d-93b3efaa72e8")
+		(uuid "e925834f-540b-4b7a-ae04-7079f3e21c36")
 	)
 	(text "red: HOLD"
 		(exclude_from_sim no)
@@ -3301,7 +3765,7 @@
 			)
 			(justify left)
 		)
-		(uuid "93d9f9c7-1ea8-4a52-a6d4-d9a42c987f02")
+		(uuid "f1ac47ba-1a87-461d-a418-a1dad3fbc5a6")
 	)
 	(wire
 		(pts
@@ -3312,7 +3776,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "0012ecf6-8f41-44d4-b5f6-2bb532b58126")
+		(uuid "493aaa51-beef-4a1a-bf27-0dee506eea44")
 	)
 	(label "KEY_START"
 		(at 241.3 99.06 180)
@@ -3322,7 +3786,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "28625e45-d448-4dbd-ba25-db1052e860cf")
+		(uuid "cf4d5950-1f68-4236-ab2f-2db53e7113f9")
 	)
 	(text "black: START"
 		(exclude_from_sim no)
@@ -3333,7 +3797,7 @@
 			)
 			(justify left)
 		)
-		(uuid "d9737d60-1725-4258-bfb1-ed47bf49580c")
+		(uuid "239eab96-5702-4c94-8041-3972ae4d34d6")
 	)
 	(wire
 		(pts
@@ -3344,7 +3808,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8b62bcd8-12d8-496d-9a24-fedf4f2c531e")
+		(uuid "5ba13a00-f234-4515-b43b-1a83744d680b")
 	)
 	(label "KEY_WARMER_COOLER"
 		(at 241.3 101.6 180)
@@ -3354,7 +3818,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "9729b350-3dc0-43e1-81a8-b5edf27df291")
+		(uuid "e98ce920-9869-46e5-87ad-364f20df70cc")
 	)
 	(text "white: WARMER, COOLER"
 		(exclude_from_sim no)
@@ -3365,7 +3829,7 @@
 			)
 			(justify left)
 		)
-		(uuid "387a4111-59ae-4ab5-b998-ba55b97b65a3")
+		(uuid "5c272125-1dbd-43fa-a47a-181e0234e8ae")
 	)
 	(wire
 		(pts
@@ -3376,7 +3840,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e7e8dd9a-9cf4-4886-b9d3-0e3a7c8614a3")
+		(uuid "ed8c581c-10df-4b1e-be62-8d459e54bc80")
 	)
 	(label "KEY_REF123"
 		(at 241.3 104.14 180)
@@ -3386,7 +3850,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "bce445b7-dcef-422d-af79-3bc50e19964f")
+		(uuid "73273986-b007-4502-b546-54d75a326c71")
 	)
 	(text "yellow: ref 1-3"
 		(exclude_from_sim no)
@@ -3397,7 +3861,7 @@
 			)
 			(justify left)
 		)
-		(uuid "30149754-32f4-4310-9105-e252466b52e4")
+		(uuid "f86aaa40-a02f-471b-8d99-bdcfb1ddc725")
 	)
 	(wire
 		(pts
@@ -3408,7 +3872,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e2b714e5-75df-42ea-b8be-266ac0d6fd84")
+		(uuid "60901991-21fd-4783-9abe-fcaafeb2de1d")
 	)
 	(label "KEY_REF4"
 		(at 241.3 106.68 180)
@@ -3418,7 +3882,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "b4386fb3-78d2-4331-b7b2-d4b749d552e6")
+		(uuid "84dbf2ef-0265-4008-8459-5ae1d23a101c")
 	)
 	(text "blue: ref 4"
 		(exclude_from_sim no)
@@ -3429,7 +3893,7 @@
 			)
 			(justify left)
 		)
-		(uuid "26304f17-6e39-47b8-a474-3eb2c9a29047")
+		(uuid "c904de35-023b-45e9-966d-5f996911e4d7")
 	)
 	(wire
 		(pts
@@ -3440,7 +3904,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "0b17ad9e-f386-46c2-8c23-db2d1fd4ee70")
+		(uuid "476325ad-2116-4239-be87-3a5abf2c25e6")
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -3450,8 +3914,8 @@
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "e013cc07-99cc-40ae-90c7-45d682412647")
-		(property "Reference" "#PWR03"
+		(uuid "811661f4-f0e2-4fa4-98e0-62a123f559ba")
+		(property "Reference" "#PWR04"
 			(at 241.3 115.57 0)
 			(effects
 				(font
@@ -3496,12 +3960,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "2c7d9e60-5d6b-4b8f-ab73-17d20f20c7d0")
+			(uuid "51026e6f-761f-493e-b454-d8d091ee5a5d")
 		)
 		(instances
 			(project "ChronothermESP"
 				(path "/72f0ab0e-c398-414e-a02c-584533cdc2c6"
-					(reference "#PWR03")
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -3516,7 +3980,7 @@
 			)
 			(justify left)
 		)
-		(uuid "0310f609-99d9-4704-871a-f6ccb6c7e7c2")
+		(uuid "a1426486-5bad-4e15-a2c6-8d97215372b7")
 	)
 	(symbol
 		(lib_id "Connector:Screw_Terminal_01x02")
@@ -3526,7 +3990,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f50044d4-68af-4350-b76c-8d83c5fd57c0")
+		(uuid "f8bb7edf-e077-4cf5-9134-a21de8e79952")
 		(property "Reference" "J2"
 			(at 25.4 133.35 0)
 			(effects
@@ -3571,10 +4035,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "1f949640-925e-4029-b5bc-eb0ec7fbc095")
+			(uuid "b5ae4f7d-008b-4944-a241-7c3849f43461")
 		)
 		(pin "2"
-			(uuid "13746efc-f672-4d82-b31f-6b4fd2a3a93f")
+			(uuid "82488e76-9ccd-4765-91b5-8b51e5751c86")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -3594,7 +4058,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "feca6b40-6adc-4fb3-b92f-1235a1122bdc")
+		(uuid "8e20a8a5-f986-4e79-8bb6-e8439f497595")
 	)
 	(wire
 		(pts
@@ -3605,7 +4069,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2cc33c7f-93b6-42b5-833a-a95d1a0bb31d")
+		(uuid "a63b78d5-7e8c-451e-9388-c805c66e0fd1")
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
@@ -3615,7 +4079,7 @@
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "92e17685-6332-471f-a8e9-c7c5105ec536")
+		(uuid "ba92fc89-68a4-4e52-9115-bc58e1b8a80f")
 		(property "Reference" "#FLG01"
 			(at 35.56 135.255 0)
 			(effects
@@ -3661,7 +4125,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "7e6fbff4-8a27-418f-98dd-22e0deff0eb5")
+			(uuid "b8474c16-f892-4640-917a-c081cbad62ab")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -3680,8 +4144,8 @@
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "10c5b92d-6100-436a-9a3c-daea7d96eb29")
-		(property "Reference" "#PWR04"
+		(uuid "15e7c4da-4704-4f8d-833b-e35b71df8b47")
+		(property "Reference" "#PWR05"
 			(at 45.72 140.97 0)
 			(effects
 				(font
@@ -3726,12 +4190,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "1b31a79c-48b0-41c0-a4f9-5d2e54b9ff00")
+			(uuid "0f7c5efe-9c7a-4b7a-8d7c-44ac3b0e6438")
 		)
 		(instances
 			(project "ChronothermESP"
 				(path "/72f0ab0e-c398-414e-a02c-584533cdc2c6"
-					(reference "#PWR04")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -3746,7 +4210,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9154899f-e6c2-4d58-b6b5-8237f69d1d24")
+		(uuid "ce52f6ab-4a3c-4629-be57-7a1f2ead0887")
 	)
 	(wire
 		(pts
@@ -3757,7 +4221,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "74b7f72d-6d9f-4ec9-b635-971059fb0f73")
+		(uuid "e93b20ad-14b4-42eb-ab27-1c7d64dd462f")
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
@@ -3767,7 +4231,7 @@
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "53a91721-1e45-4d2c-aa9d-5584bc4e314e")
+		(uuid "354401a8-434a-420e-bdd0-4a0ce272f36e")
 		(property "Reference" "#FLG02"
 			(at 35.56 141.605 0)
 			(effects
@@ -3813,7 +4277,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "62025c41-c7ae-41dc-8e7e-609ddda4b25e")
+			(uuid "f06dbd63-524a-4693-ae0d-875de462afe5")
 		)
 		(instances
 			(project "ChronothermESP"
@@ -3832,8 +4296,8 @@
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "8a3c92af-bda8-41d2-abca-10fd4eb6dc3d")
-		(property "Reference" "#PWR05"
+		(uuid "955daa20-d7d1-4eb4-8a1d-af6b24d9abb4")
+		(property "Reference" "#PWR06"
 			(at 45.72 146.05 0)
 			(effects
 				(font
@@ -3878,12 +4342,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "fd40fa27-2db9-4a58-87f1-8a54d46b6112")
+			(uuid "dfe5c4fc-674d-4d57-9b39-92527ba9e229")
 		)
 		(instances
 			(project "ChronothermESP"
 				(path "/72f0ab0e-c398-414e-a02c-584533cdc2c6"
-					(reference "#PWR05")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -3898,7 +4362,296 @@
 			)
 			(justify left)
 		)
-		(uuid "826fcda8-19b4-4bca-8e51-ee038f4f4fea")
+		(uuid "fa993416-b898-4a15-99c5-b9e1d10a7812")
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x04")
+		(at 91.44 142.24 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "70b3cf04-4431-4a5a-880d-6c18dbc969db")
+		(property "Reference" "J3"
+			(at 91.44 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BME280"
+			(at 91.44 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+			(at 91.44 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 91.44 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 91.44 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0b9672a2-dd9e-48ed-adb1-61e20e934d09")
+		)
+		(pin "2"
+			(uuid "d158dce3-56fe-4f50-9e7a-7a4af3246712")
+		)
+		(pin "3"
+			(uuid "4ab5a949-5a1b-4e9e-bdc0-8aa857aff94a")
+		)
+		(pin "4"
+			(uuid "eee6c623-2967-4de4-ad95-eccc3eacee22")
+		)
+		(instances
+			(project "ChronothermESP"
+				(path "/72f0ab0e-c398-414e-a02c-584533cdc2c6"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 86.36 139.7)
+			(xy 76.2 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5971e380-84a2-4928-b403-35e0fc8e578d")
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 76.2 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "af2a7a9f-626c-4894-9df0-e962acb32747")
+		(property "Reference" "#PWR07"
+			(at 76.2 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 76.2 136.144 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 76.2 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 76.2 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "81ddb0f6-4fb1-450b-befc-8b1d740358f6")
+		)
+		(instances
+			(project "ChronothermESP"
+				(path "/72f0ab0e-c398-414e-a02c-584533cdc2c6"
+					(reference "#PWR07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 86.36 142.24)
+			(xy 73.66 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "24b71e3a-8c67-407b-ae24-d8530af35d77")
+	)
+	(wire
+		(pts
+			(xy 73.66 142.24)
+			(xy 73.66 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48fcd868-9d33-4437-83b5-8ea7f2e650df")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 73.66 152.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "bfc98ff8-4722-421f-86e5-3e568ff07866")
+		(property "Reference" "#PWR08"
+			(at 73.66 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 73.66 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 73.66 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 73.66 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b6c3494a-fa8f-4c7a-9603-66e0c6161556")
+		)
+		(instances
+			(project "ChronothermESP"
+				(path "/72f0ab0e-c398-414e-a02c-584533cdc2c6"
+					(reference "#PWR08")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 86.36 144.78)
+			(xy 81.28 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d7400fdf-2628-4c53-b0fe-25c2fc0f2ff6")
+	)
+	(label "SCL"
+		(at 81.28 144.78 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2973d713-00c5-4d00-a44b-a62ce827020b")
+	)
+	(wire
+		(pts
+			(xy 86.36 147.32)
+			(xy 81.28 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bb53616-0c44-4806-931b-1ba1fc9f1d9e")
+	)
+	(label "SDA"
+		(at 81.28 147.32 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b6821663-5abb-4861-8116-c33401e0b2df")
+	)
+	(text "BME280 sensor (optional), I2C on GPIO6/7"
+		(exclude_from_sim no)
+		(at 68.58 130.81 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5f14d81c-0ea2-4538-bac3-2baae35526a4")
 	)
 	(sheet_instances
 		(path "/"
